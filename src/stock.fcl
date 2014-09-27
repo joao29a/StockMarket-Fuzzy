@@ -1,0 +1,62 @@
+FUNCTION_BLOCK stock
+  VAR_INPUT
+    Mm_10 : REAL;
+    Mm_50 : REAL;
+    Noticia: INT;
+  END_INPUT
+
+  VAR_OUTPUT
+    Saida: REAL;
+  END_OUTPUT
+
+  FUZZIFY Mm_10
+    TERM Negativo
+    TERM Neutro
+    TERM Positivo
+  END_FUZZIFY
+
+  FUZZIFY Mm_50
+    TERM Negativo
+    TERM Neutro
+    TERM Positivo
+  END_FUZZIFY
+
+  FUZZIFY Noticia
+    TERM Negativo
+    TERM Positivo
+  END_FUZZIFY
+
+  DEFUZZIFY Saida
+    TERM Pessimo := 0.1;
+    TERM Ruim := 0.3;
+    TERM Regular := 0.5;
+    TERM Bom := 0.7;
+    TERM Otimo := 0.9;
+    ACCU:MAX;
+    METHOD: COGS;
+    DEFAULT := 0;
+  END_DEFUZZIFY
+
+  RULEBLOCK
+   AND:MIN;
+   RULE 0: IF (Mm_10 IS Negativo) AND (Mm_50 IS Negativo) AND (Noticia IS Negativo) THEN (Saida IS Pessimo);
+   RULE 1: IF (Mm_10 IS Negativo) AND (Mm_50 IS Negativo) AND (Noticia IS Positivo) THEN (Saida IS Ruim);
+   RULE 2: IF (Mm_10 IS Negativo) AND (Mm_50 IS Neutro) AND (Noticia IS Negativo) THEN (Saida IS Ruim);
+   RULE 3: IF (Mm_10 IS Negativo) AND (Mm_50 IS Neutro) AND (Noticia IS Positivo) THEN (Saida IS Regular);
+   RULE 4: IF (Mm_10 IS Negativo) AND (Mm_50 IS Positivo) AND (Noticia IS Negativo) THEN (Saida IS Ruim);
+   RULE 5: IF (Mm_10 IS Negativo) AND (Mm_50 IS Positivo) AND (Noticia IS Positivo) THEN (Saida IS Regular);
+   RULE 6: IF (Mm_10 IS Neutro) AND (Mm_50 IS Negativo) AND (Noticia IS Negativo) THEN (Saida IS Pessimo);
+   RULE 7: IF (Mm_10 IS Neutro) AND (Mm_50 IS Negativo) AND (Noticia IS Positivo) THEN (Saida IS Ruim);
+   RULE 8: IF (Mm_10 IS Neutro) AND (Mm_50 IS Neutro) AND (Noticia IS Negativo) THEN (Saida IS Ruim);
+   RULE 9: IF (Mm_10 IS Neutro) AND (Mm_50 IS Neutro) AND (Noticia IS Positivo) THEN (Saida IS Regular);
+   RULE 10: IF (Mm_10 IS Neutro) AND (Mm_50 IS Positivo) AND (Noticia IS Negativo) THEN (Saida IS Regular);
+   RULE 11: IF (Mm_10 IS Neutro) AND (Mm_50 IS Positivo) AND (Noticia IS Positivo) THEN (Saida IS Bom);
+   RULE 12: IF (Mm_10 IS Positivo) AND (Mm_50 IS Negativo) AND (Noticia IS Negativo) THEN (Saida IS Ruim);
+   RULE 13: IF (Mm_10 IS Positivo) AND (Mm_50 IS Negativo) AND (Noticia IS Positivo) THEN (Saida IS Regular);
+   RULE 14: IF (Mm_10 IS Positivo) AND (Mm_50 IS Neutro) AND (Noticia IS Negativo) THEN (Saida IS Regular);
+   RULE 15: IF (Mm_10 IS Positivo) AND (Mm_50 IS Neutro) AND (Noticia IS Positivo) THEN (Saida IS Bom);
+   RULE 16: IF (Mm_10 IS Positivo) AND (Mm_50 IS Positivo) AND (Noticia IS Negativo) THEN (Saida IS Bom);
+   RULE 17: IF (Mm_10 IS Positivo) AND (Mm_50 IS Positivo) AND (Noticia IS Positivo) THEN (Saida IS Otimo);
+ END_RULEBLOCK
+
+END_FUNCTION_BLOCK
