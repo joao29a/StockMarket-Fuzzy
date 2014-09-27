@@ -22,7 +22,8 @@ class StockMarketFuzzy:
         for line in f:
             line = line.replace('\n', '');
             line = line.split();
-            self.stock[line[0]] = Stock(line[0], float(line[1]), float(line[2]), float(line[3]), float(line[4]), float(line[5]))
+            self.stock[line[0]] = Stock(line[0], float(line[1]), float(line[2]), \
+                    float(line[3]), float(line[4]), float(line[5]))
             self.dates.append(line[0])
 
     def __moving_average(self, init, end):
@@ -34,12 +35,18 @@ class StockMarketFuzzy:
 
     def fuzzy(self, fuzzy_file):
         import fuzzy.storage.fcl.Reader
-        #system = fuzzy.storage.fcl.Reader.Reader().load_from_file(fuzzy_file);
-        sum10 = self.__moving_average(40, 50);
-        sum50 = self.__moving_average(0, 50);
-        print sum10;
-        print sum50;
-        print self.stock[self.dates[50]].open;
+        system = fuzzy.storage.fcl.Reader.Reader().load_from_file(fuzzy_file);
+        my_input = {"Mm_10": 1.5,#self.__moving_average(90, 100),
+                    "Mm_50": 2,#self.__moving_average(50, 100),
+                    "Noticia": 0}
+        my_output = {"Saida": 0.0}
+        system.calculate(my_input, my_output);
+        print my_output["Saida"]
+        #sum10 = self.__moving_average(40, 50);
+        #sum50 = self.__moving_average(0, 50);
+        #print sum10;
+        #print sum50;
+        #print self.stock[self.dates[50]].open;
 
 
 if __name__ == '__main__':

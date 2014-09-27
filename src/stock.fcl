@@ -2,28 +2,28 @@ FUNCTION_BLOCK stock
   VAR_INPUT
     Mm_10 : REAL;
     Mm_50 : REAL;
-    Noticia: INT;
-  END_INPUT
+    Noticia: REAL;
+  END_VAR
 
   VAR_OUTPUT
     Saida: REAL;
-  END_OUTPUT
+  END_VAR
 
   FUZZIFY Mm_10
-    TERM Negativo
-    TERM Neutro
-    TERM Positivo
+    TERM Negativo := (-1, 1) (-1, 0) (0, 0);
+    TERM Neutro := (-1, 0) (0, 1) (1, 0);
+    TERM Positivo := (0, 0) (1, 0) (1, 1);
   END_FUZZIFY
 
   FUZZIFY Mm_50
-    TERM Negativo
-    TERM Neutro
-    TERM Positivo
+    TERM Negativo := (-1, 1) (-1, 0) (0, 0);
+    TERM Neutro := (-1, 0) (0, 1) (1, 0);
+    TERM Positivo := (0, 0) (1, 0) (1, 1);
   END_FUZZIFY
 
   FUZZIFY Noticia
-    TERM Negativo
-    TERM Positivo
+    TERM Negativo := (0, 1) (0.33, 1) (0.66, 0) (1, 0);
+    TERM Positivo := (1, 0) (0.33, 0) (0.66, 1) (1, 1);
   END_FUZZIFY
 
   DEFUZZIFY Saida
@@ -37,7 +37,7 @@ FUNCTION_BLOCK stock
     DEFAULT := 0;
   END_DEFUZZIFY
 
-  RULEBLOCK
+  RULEBLOCK first
    AND:MIN;
    RULE 0: IF (Mm_10 IS Negativo) AND (Mm_50 IS Negativo) AND (Noticia IS Negativo) THEN (Saida IS Pessimo);
    RULE 1: IF (Mm_10 IS Negativo) AND (Mm_50 IS Negativo) AND (Noticia IS Positivo) THEN (Saida IS Ruim);
