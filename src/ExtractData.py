@@ -12,7 +12,9 @@ def get_market_value(stock='all', start='', end='', size=0):
             stock_value = line.replace('"','').replace('\n','').split(',', 1)
             print "%-10s : %s" % (stock_value[0], stock_value[1])
     else:
-        data = Quandl.get(stock, trim_start=start, trim_end=end)
+        data = None
+        if (start == '' and end == ''): data = Quandl.get(stock)
+        else: data = Quandl.get(stock, trim_start=start, trim_end=end)
         if (size == 0): print data
         else: print data.head(size).to_string()
 
@@ -20,5 +22,7 @@ def get_market_value(stock='all', start='', end='', size=0):
 if __name__ == '__main__':
     if (len(argv) == 1):
         get_market_value()
-    elif (len(argv) > 1):
+    elif (len(argv) == 2):
+        get_market_value(argv[1]);
+    elif (len(argv) > 2):
         get_market_value(argv[1], argv[2], argv[3], int(argv[4]));

@@ -32,6 +32,20 @@ class StockMarketFuzzy:
             sum += self.stock[self.dates[i]].open;
         return sum / (end - init);
 
+    def show_moving_average(self):
+        mm_10_init = 40
+        mm_10_end  = mm_10_init + 10
+        mm_50_init = 0
+        mm_50_end  = mm_50_init + 50
+        day = 51
+        print "Dia Real Mm_10 Mm_50"
+        for i in range(0, 50):
+            sum10 = self.__moving_average(mm_10_init + i, mm_10_end + i)
+            sum50 = self.__moving_average(mm_50_init + i, mm_50_end + i)
+            real  = self.stock[self.dates[day - 1]].open
+            print "%d %.2f %.2f %.2f" % (day, real, sum10, sum50)
+            day += 1
+
 
     def fuzzy(self, fuzzy_file):
         import fuzzy.storage.fcl.Reader
@@ -53,4 +67,5 @@ if __name__ == '__main__':
     smf = StockMarketFuzzy();
     if (len(argv) > 2):
         smf.read_file(argv[1]);
-        smf.fuzzy(argv[2]);
+        #smf.show_moving_average();
+        #smf.fuzzy(argv[2]);
