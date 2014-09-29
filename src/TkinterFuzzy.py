@@ -2,6 +2,7 @@
 
 from StockMarketFuzzy import *
 import Tkinter
+import tkMessageBox
 
 class TkinterFuzzy:
     def __init__(self):
@@ -15,10 +16,8 @@ class TkinterFuzzy:
         self.smf = StockMarketFuzzy();
 
     def __init_option_file(self):
-        frame = Tkinter.Frame(self.tk);
-        frame.pack(anchor = Tkinter.W);
         self.option_value = Tkinter.IntVar();
-        Tkinter.Checkbutton(frame, text='Usar arquivo', variable=self.option_value, \
+        Tkinter.Checkbutton(self.__get_frame(), text='Usar arquivo', variable=self.option_value, \
                 command=self.__set_entries).pack();
 
     def __set_entries(self):
@@ -34,20 +33,17 @@ class TkinterFuzzy:
         self.e_mm50.configure(state = Tkinter.NORMAL);
 
     def __init_entries(self):
-        frame = Tkinter.Frame(self.tk);
-        frame.pack(anchor = Tkinter.W);
+        frame = self.__get_frame();
         Tkinter.Label(frame, text='Media movel 10 dias:').pack(side = Tkinter.LEFT);
         self.e_mm10 = Tkinter.Entry(frame, bd=5);
         self.e_mm10.pack(side = Tkinter.LEFT);
-        frame = Tkinter.Frame(self.tk);
-        frame.pack(anchor = Tkinter.W);
+        frame = self.__get_frame();
         Tkinter.Label(frame, text='Media movel 50 dias:').pack(side = Tkinter.LEFT);
         self.e_mm50 = Tkinter.Entry(frame, bd=5);
         self.e_mm50.pack(side = Tkinter.LEFT);
 
     def __init_radiobuttons(self):
-        frame = Tkinter.Frame(self.tk);
-        frame.pack(anchor = Tkinter.W);
+        frame = self.__get_frame();
         Tkinter.Label(frame, text='Noticia:').pack(side = Tkinter.LEFT);
         self.rb_notice = Tkinter.IntVar();
         Tkinter.Radiobutton(frame, text='Positivo', variable=self.rb_notice, \
@@ -56,18 +52,48 @@ class TkinterFuzzy:
                 value=0).pack(side = Tkinter.LEFT);
 
     def __init_button(self):
-        frame = Tkinter.Frame(self.tk);
-        frame.pack();
-        Tkinter.Button(frame, text='Enviar', command=self.__getData).pack();
+        Tkinter.Button(self.tk, text='Enviar', command=self.__getData).pack();
 
     def __getData(self):
-        pass
+        mm10 = 0;
+        mm50 = 0;
+        if (not self.option_value.get()):
+            try:
+                mm10 = float(self.e_mm10.get());
+                mm50 = float(self.e_mm50.get());
+            except Exception as error:
+                tkMessageBox.showerror('Dados invalidos', 'Insira um numero nos campos');
+                return;
+        else:
+            mm10 = self.smf.moving_average(90, 100);
+            mm50 = self.smf.moving_average(50, 100);
+        noticia  = self.rb_notice.get();
+        result   = self.smf.fuzzy(self.fuzzy_file, mm10, mm50, noticia);
+        if (noticia): noticia_str = 'Positivo';
+        else: noticia_str = 'Negativo';
+        message  = 'MM 10: ' + str(mm10) + '\nMM 50: ' + str(mm50) + \
+                '\nNoticia: ' + noticia_str + '\nResultado: ' + str(result * 100) + ' %';
+        self.__display_message(message);
 
-    def start_fuzzy(self, stock_file, fuzzy_file):
+    def __get_frame(self):
+        frame = Tkinter.Frame(self.tk);
+        frame.pack(anchor = Tkinter.W);
+        return frame;
+
+    def __display_message(self, message):
+        tkMessageBox.showinfo('Resultado', message);
+
+    def set_fuzzy_file(self, fuzzy_file):
+        self.fuzzy_file = fuzzy_file;
+
+    def start_fuzzy(self, stock_file):
         self.smf.read_file(stock_file);
         self.tk.mainloop();
 
 if __name__ == '__main__':
     if (len(argv) > 2):
         tkf = TkinterFuzzy();
-        tkf.start_fuzzy(argv[1], argv[2]);
+        tkf.set_fuzzy_file(argv[2]);
+        tkf.start_fuzzy(argv[1]);
+    else:
+        print "Insira o arquivo com 100 dias de dados e o codigo fuzzy."
