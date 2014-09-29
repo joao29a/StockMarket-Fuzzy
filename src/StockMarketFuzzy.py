@@ -50,12 +50,12 @@ class StockMarketFuzzy:
     def fuzzy(self, fuzzy_file):
         import fuzzy.storage.fcl.Reader
         system = fuzzy.storage.fcl.Reader.Reader().load_from_file(fuzzy_file);
-        my_input = {"Mm_10": 1.5,#self.__moving_average(90, 100),
+        input = {"Mm_10": 1.5,#self.__moving_average(90, 100),
                     "Mm_50": 2,#self.__moving_average(50, 100),
                     "Noticia": 0}
-        my_output = {"Saida": 0.0}
-        system.calculate(my_input, my_output);
-        print my_output["Saida"]
+        output = {"Saida": 0.0}
+        system.calculate(input, output);
+        print output["Saida"]
         #sum10 = self.__moving_average(40, 50);
         #sum50 = self.__moving_average(0, 50);
         #print sum10;
@@ -64,8 +64,8 @@ class StockMarketFuzzy:
 
 
 if __name__ == '__main__':
-    smf = StockMarketFuzzy();
     if (len(argv) > 2):
+        smf = StockMarketFuzzy();
         smf.read_file(argv[1]);
-        #smf.show_moving_average();
+        smf.show_moving_average();
         #smf.fuzzy(argv[2]);
