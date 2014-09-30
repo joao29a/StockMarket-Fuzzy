@@ -57,6 +57,8 @@ class StockMarketFuzzy:
         system.calculate(input, output);
         return output["Saida"]
 
+    def get_real(self, day):
+        return self.stock[self.dates[day - 1]].open;
 
 if __name__ == '__main__':
     if (len(argv) > 2):
