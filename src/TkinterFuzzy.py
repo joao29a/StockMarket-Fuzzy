@@ -108,7 +108,7 @@ class TkinterFuzzy:
                 + '\nReal: ' + str(real) + '\nNoticias positivas: ' + str(news * 100) \
                 + '%\nMM 10 Diferenca: ' + str(mm10_diff * 100) \
                 + '%\nMM 50 Diferenca: ' + str(mm50_diff * 100) \
-                + '%\nResultado: ' + str(result * 100) + '%';
+                + '%\nResultado: ' + str("%.2f" % (result * 100)) + '%';
         self.__display_message(message);
 
     def __get_frame(self):
