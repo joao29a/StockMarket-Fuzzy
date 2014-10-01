@@ -10,13 +10,13 @@ FUNCTION_BLOCK stock
   END_VAR
 
   FUZZIFY Mm_10
-    TERM Negativo := (-1, 1) (-0.7, 1) (0, 0) (0.3, 1) (1, 1);
-    TERM Positivo := (-0.7, 0) (0, 1) (0.3, 0);
+    TERM Negativo := (-1, 1) (-0.5, 1) (-0.3, 0) (0.3, 1) (0.5, 1) (1, 1);
+    TERM Positivo := (-0.4, 0) (-0.1, 1) (0.1, 1) (0.4, 0);
   END_FUZZIFY
 
   FUZZIFY Mm_50
-    TERM Negativo := (-1, 1) (-0.7, 1) (0, 0) (0.3, 1) (1, 1);
-    TERM Positivo := (-0.7, 0) (0, 1) (0.3, 0);
+    TERM Negativo := (-1, 1) (-0.5, 1) (-0.3, 0) (0.3, 1) (0.5, 1) (1, 1);
+    TERM Positivo := (-0.4, 0) (-0.1, 1) (0.1, 1) (0.4, 0);
   END_FUZZIFY
 
   FUZZIFY Noticia
